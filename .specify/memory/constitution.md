@@ -1,55 +1,94 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# In-Memory To-Do Console Application Constitution
+
+<!-- Sync Impact Report
+Version change: 0.0.0 → 1.0.0
+- Initial constitution creation for the in-memory To-Do console application
+- All principles and sections added as new
+- Templates requiring updates: ✅ Updated
+- Follow-up TODOs: None
+-->
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Spec-Driven Development (NON-NEGOTIABLE)
+All implementation must strictly follow approved specifications. No feature or change may be implemented without a corresponding specification document. Specifications must be reviewed and approved before implementation begins.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Simplicity Over Complexity
+No unnecessary abstractions or premature optimization. Code must be straightforward and easy to understand. Follow YAGNI (You Aren't Gonna Need It) principles rigorously.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Deterministic Behavior
+Same inputs must always produce the same outputs. The application must be completely deterministic with no hidden state or randomness that affects core functionality.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Readability and Maintainability
+Code must be easy to understand for human reviewers. Use clear, descriptive names. Functions must do one thing and be named clearly. Follow Python best practices and PEP 8 guidelines.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Explicit State Management
+Task state must be clear, predictable, and traceable. All state changes must be explicit and logged appropriately. No global mutable state except for the controlled in-memory task storage.
 
-### [PRINCIPLE_6_NAME]
+### VI. Clear Separation of Concerns
+Maintain strict separation between business logic, input/output handling, and data management. Each component must have a single, well-defined responsibility.
 
+## Architecture Standards
 
-[PRINCIPLE__DESCRIPTION]
+### Technology Stack
+- Language: Python 3.13+
+- Execution Model: Console-based, synchronous, in-memory only
+- Dependency Management: UV (Ultra-fast Python package installer)
+- No external databases or file persistence
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### Task Structure Requirements
+Every task must have the following structure:
+- `id` (int): Unique, stable identifier generated in-memory
+- `title` (str): Required, non-empty string
+- `description` (str): Optional string
+- `completed` (bool): Completion status
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### User Interface Requirements
+- All user actions must provide clear console feedback
+- All invalid inputs must be safely handled without crashing
+- Error messages must be descriptive and actionable
+- Success messages must confirm the action taken
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Development Standards
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### Code Quality
+- No unused code, dead code, or placeholder logic
+- All functions must have clear, descriptive names
+- Functions must do one thing and do it well
+- Follow Python PEP 8 style guide
+- Include docstrings for all public functions and classes
+
+### Testing Requirements
+- All features must be tested before implementation
+- Tests must cover both happy paths and edge cases
+- Test coverage must be maintained at acceptable levels
+- Regression tests must be added for all bug fixes
+
+### Documentation Requirements
+- Root-level Constitution file defining project rules
+- `specs/history/` directory containing all specification versions
+- `src/` directory containing only production Python code
+- `README.md` with setup instructions and usage guide
+- `CLAUDE.md` defining how Claude Code should assist development
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+### Constitution Compliance
+This constitution supersedes all other practices and guidelines. All code, documentation, and development processes must comply with these principles.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+### Amendment Process
+- Amendments require documentation of the change
+- Amendments must be approved through the standard review process
+- Major changes require migration plans and backward compatibility considerations
+
+### Versioning Policy
+- **MAJOR**: Backward incompatible changes to principles or architecture
+- **MINOR**: New principles, sections, or material expansions
+- **PATCH**: Clarifications, wording improvements, typo fixes
+
+### Review Requirements
+- All pull requests must verify compliance with this constitution
+- Complexity must be explicitly justified
+- Non-compliant code must be rejected or refactored
+
+**Version**: 1.0.0 | **Ratified**: 2026-01-19 | **Last Amended**: 2026-01-19
