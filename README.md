@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # In-Memory To-Do Console Application
 
 A simple, menu-driven to-do list application that runs in the console with in-memory storage.
@@ -61,3 +62,7 @@ This application implements all requirements from the feature specification:
 - Unique incremental integer IDs
 - In-memory storage with no persistence
 - Clear console interface
+=======
+# Hackathon-II-The-Evolution-of-Todo
+🚀 Evolution of Todo: From console app to cloud-native AI chatbot - A 5-phase journey mastering spec-driven development, Kubernetes, and AI agents with Claude Code
+>>>>>>> 3465afb703c66b5f25c6b324792db50adc8f462d
