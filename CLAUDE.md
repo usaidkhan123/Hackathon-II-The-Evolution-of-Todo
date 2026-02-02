@@ -2,7 +2,160 @@
 
 This file is generated during init for the selected agent.
 
-You are an expert AI assistant specializing in Spec-Driven Development (SDD). Your primary goal is to work with the architext to build products.
+You are an expert AI assistant specializing in Spec-Driven Development (SDD). Your primary goal is to work with the architect to build products.
+
+---
+
+## Project Overview
+
+**Objective:** Transform the console To-Do app into a modern multi-user web application with persistent storage using Claude Code and Spec-Kit Plus.
+
+**Development Approach:** Agentic Dev Stack workflow: Write spec → Generate plan → Break into tasks → Implement via Claude Code. No manual coding allowed.
+
+### Requirements (Basic Level)
+- Implement all 5 Basic Level features as a web application:
+  1. Add Task
+  2. View Tasks
+  3. Update Task
+  4. Delete Task
+  5. Mark Task as Complete/Incomplete
+- Create RESTful API endpoints
+- Build responsive frontend interface
+- Store data in Neon Serverless PostgreSQL database
+- Authentication – Implement user signup/signin using Better Auth
+
+---
+
+## Technology Stack
+
+| Layer          | Technology                      |
+|----------------|--------------------------------|
+| Frontend       | Next.js 16+ (App Router)       |
+| Backend        | Python FastAPI                 |
+| ORM            | SQLModel                       |
+| Database       | Neon Serverless PostgreSQL     |
+| Spec-Driven    | Claude Code + Spec-Kit Plus    |
+| Authentication | Better Auth (with JWT plugin)  |
+
+---
+
+## Agent Responsibilities
+
+This project uses specialized agents for different concerns. Always delegate to the appropriate agent:
+
+### Auth Agent (`auth-skill-agent`)
+**Use for:** Authentication design and implementation
+- User signup/signin flows
+- Better Auth configuration (frontend)
+- JWT token handling and verification
+- Authentication middleware for FastAPI
+- User isolation and access control
+- Security concerns related to user identity
+
+### Frontend Agent (`frontend-skill-agent`)
+**Use for:** Next.js frontend development
+- Responsive UI design (mobile-first)
+- Authentication UI (login/signup pages)
+- Task management UI (CRUD interfaces)
+- API communication layer (services)
+- State management
+- Accessibility compliance
+
+### Database Agent (`neon-db-architect`)
+**Use for:** Database design and operations
+- Neon PostgreSQL schema design
+- Repository pattern implementation
+- SQL query writing (parameterized)
+- Migration strategies
+- Connection management
+- Database security best practices
+
+### Backend Agent (`fastapi-backend-engineer`)
+**Use for:** FastAPI backend development
+- REST API endpoints design
+- Pydantic request/response schemas
+- Service layer business logic
+- Repository pattern integration
+- JWT authentication guards (dependency injection)
+- Error handling and validation
+
+---
+
+## Authentication Architecture
+
+Better Auth is configured to issue JWT tokens when users log in. These tokens are self-contained credentials verified by any service that knows the secret key.
+
+### Authentication Flow
+1. **User logs in on Frontend** → Better Auth creates a session and issues a JWT token
+2. **Frontend makes API call** → Includes JWT token in `Authorization: Bearer <token>` header
+3. **Backend receives request** → Extracts token from header, verifies signature using shared secret
+4. **Backend identifies user** → Decodes token to get user ID, email, etc.
+5. **Backend filters data** → Returns only tasks belonging to that authenticated user
+
+### Shared Secret Management
+- JWT signing/verification uses identical secret key
+- Secret provided via environment variable: `BETTER_AUTH_SECRET`
+- NEVER hardcode secrets in code, specs, or documentation
+
+### Security Rules
+- ALL REST endpoints require valid JWT token
+- Requests without token → HTTP 401
+- Requests with invalid/expired token → HTTP 401
+- User isolation enforced at EVERY operation
+- Backend is stateless (no frontend session dependency)
+
+---
+
+## Project Structure
+
+```
+/
+├── frontend/                    # Next.js 16+ App Router
+│   ├── app/                     # App Router pages
+│   ├── components/              # Reusable UI components
+│   ├── services/                # API communication layer
+│   ├── lib/                     # Utilities and auth config
+│   └── styles/                  # CSS/styling
+│
+├── backend/                     # Python FastAPI
+│   ├── main.py                  # FastAPI app initialization
+│   ├── api/
+│   │   ├── routes/              # Route handlers
+│   │   └── dependencies/        # Auth guards, DB sessions
+│   ├── schemas/                 # Pydantic models
+│   ├── services/                # Business logic
+│   ├── repositories/            # Data access layer
+│   ├── core/                    # Config, security
+│   └── db/                      # Database connection
+│
+├── specs/                       # Feature specifications
+│   └── <feature>/
+│       ├── spec.md              # Requirements
+│       ├── plan.md              # Architecture
+│       └── tasks.md             # Implementation tasks
+│
+├── history/                     # Development history
+│   ├── prompts/                 # PHR records
+│   └── adr/                     # Architecture decisions
+│
+└── .specify/                    # SpecKit Plus templates
+```
+
+---
+
+## API Endpoints (Required)
+
+| Method | Endpoint                    | Description              |
+|--------|----------------------------|--------------------------|
+| POST   | /tasks                     | Add a new task           |
+| GET    | /tasks                     | View all user's tasks    |
+| PUT    | /tasks/{id}                | Update a task            |
+| DELETE | /tasks/{id}                | Delete a task            |
+| PATCH  | /tasks/{id}/complete       | Toggle task completion   |
+
+All endpoints require JWT authentication and scope data to the authenticated user.
+
+---
 
 ## Task context
 
@@ -208,3 +361,44 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
+
+---
+
+## Environment Variables
+
+Required environment variables for the project:
+
+```env
+# Database (Neon PostgreSQL)
+DATABASE_URL=postgresql://...@...neon.tech/...
+
+# Authentication (Better Auth)
+BETTER_AUTH_SECRET=your-secret-key-here
+BETTER_AUTH_URL=http://localhost:3000
+
+# Backend
+BACKEND_URL=http://localhost:8000
+```
+
+Never commit real secrets. Use `.env.example` with placeholder values.
+
+---
+
+## Quick Reference: Agent Invocation
+
+When working on this project, delegate to the appropriate agent:
+
+| Task Type                          | Agent to Use              |
+|-----------------------------------|---------------------------|
+| Login/Signup UI                   | Frontend Agent            |
+| Better Auth configuration         | Auth Agent                |
+| JWT verification middleware       | Auth Agent                |
+| Task CRUD UI components           | Frontend Agent            |
+| REST API endpoints                | Backend Agent             |
+| Pydantic schemas                  | Backend Agent             |
+| Database schema design            | Database Agent            |
+| Repository implementation         | Database Agent            |
+| User isolation in queries         | Auth Agent + Backend Agent|
+| API service layer (frontend)      | Frontend Agent            |
+
+---
